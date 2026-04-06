@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeatherApp</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <h1 class="app-title">WeatherApp</h1>
+        <form class="search-form" id="searchForm" autocomplete="off">
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Search for a city…"
+            aria-label="City name"
+          />
+          <button type="submit" class="search-btn" aria-label="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" width="20" height="20">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+        </form>
+      </header>
+
+      <main class="app-main">
+        <div class="error-message hidden" id="errorMessage" role="alert"></div>
+
+        <div class="weather-card hidden" id="weatherCard">
+          <div class="weather-location">
+            <span class="weather-city" id="weatherCity"></span>
+            <span class="weather-country" id="weatherCountry"></span>
+          </div>
+
+          <div class="weather-primary">
+            <div class="weather-icon" id="weatherIcon" aria-hidden="true"></div>
+            <div class="weather-temp">
+              <span class="temp-value" id="tempValue"></span>
+              <div class="temp-toggle">
+                <button class="unit-btn active" id="btnC" data-unit="C">°C</button>
+                <span class="unit-divider">|</span>
+                <button class="unit-btn" id="btnF" data-unit="F">°F</button>
+              </div>
+            </div>
+          </div>
+
+          <p class="weather-description" id="weatherDescription"></p>
+
+          <div class="weather-details">
+            <div class="detail-item">
+              <span class="detail-icon">💧</span>
+              <span class="detail-label">Humidity</span>
+              <span class="detail-value" id="detailHumidity"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">💨</span>
+              <span class="detail-label">Wind</span>
+              <span class="detail-value" id="detailWind"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">🌡️</span>
+              <span class="detail-label">Feels Like</span>
+              <span class="detail-value" id="detailFeelsLike"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">👁️</span>
+              <span class="detail-label">Visibility</span>
+              <span class="detail-value" id="detailVisibility"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="loading hidden" id="loadingSpinner" aria-live="polite">
+          <div class="spinner"></div>
+          <p>Fetching weather data…</p>
+        </div>
+
+        <div class="placeholder" id="placeholder">
+          <div class="placeholder-icon">🌍</div>
+          <p>Enter a city name to see the current weather.</p>
+        </div>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
