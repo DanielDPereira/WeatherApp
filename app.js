@@ -7,30 +7,30 @@
 
 // ── WMO weather-code map ────────────────────────────────────────────────────
 const WMO_CODES = {
-  0:  { label: "Clear Sky",           emoji: "☀️" },
-  1:  { label: "Mainly Clear",        emoji: "🌤️" },
-  2:  { label: "Partly Cloudy",       emoji: "⛅" },
-  3:  { label: "Overcast",            emoji: "☁️" },
-  45: { label: "Foggy",               emoji: "🌫️" },
-  48: { label: "Icy Fog",             emoji: "🌫️" },
-  51: { label: "Light Drizzle",       emoji: "🌦️" },
-  53: { label: "Moderate Drizzle",    emoji: "🌦️" },
-  55: { label: "Dense Drizzle",       emoji: "🌧️" },
-  61: { label: "Slight Rain",         emoji: "🌧️" },
-  63: { label: "Moderate Rain",       emoji: "🌧️" },
-  65: { label: "Heavy Rain",          emoji: "🌧️" },
-  71: { label: "Slight Snow",         emoji: "🌨️" },
-  73: { label: "Moderate Snow",       emoji: "🌨️" },
-  75: { label: "Heavy Snow",          emoji: "❄️" },
-  77: { label: "Snow Grains",         emoji: "🌨️" },
-  80: { label: "Slight Showers",      emoji: "🌦️" },
-  81: { label: "Moderate Showers",    emoji: "🌧️" },
-  82: { label: "Violent Showers",     emoji: "⛈️" },
-  85: { label: "Slight Snow Showers", emoji: "🌨️" },
-  86: { label: "Heavy Snow Showers",  emoji: "❄️" },
-  95: { label: "Thunderstorm",        emoji: "⛈️" },
-  96: { label: "Thunderstorm w/ Hail","emoji": "⛈️" },
-  99: { label: "Thunderstorm w/ Heavy Hail", emoji: "⛈️" },
+  0:  { label: "Céu Limpo",                  emoji: "☀️" },
+  1:  { label: "Principalmente Limpo",        emoji: "🌤️" },
+  2:  { label: "Parcialmente Nublado",        emoji: "⛅" },
+  3:  { label: "Encoberto",                   emoji: "☁️" },
+  45: { label: "Nevoeiro",                    emoji: "🌫️" },
+  48: { label: "Nevoeiro com Geada",          emoji: "🌫️" },
+  51: { label: "Garoa Fraca",                 emoji: "🌦️" },
+  53: { label: "Garoa Moderada",              emoji: "🌦️" },
+  55: { label: "Garoa Intensa",               emoji: "🌧️" },
+  61: { label: "Chuva Fraca",                 emoji: "🌧️" },
+  63: { label: "Chuva Moderada",              emoji: "🌧️" },
+  65: { label: "Chuva Forte",                 emoji: "🌧️" },
+  71: { label: "Neve Fraca",                  emoji: "🌨️" },
+  73: { label: "Neve Moderada",               emoji: "🌨️" },
+  75: { label: "Neve Intensa",                emoji: "❄️" },
+  77: { label: "Grãos de Neve",               emoji: "🌨️" },
+  80: { label: "Pancadas Fracas",             emoji: "🌦️" },
+  81: { label: "Pancadas Moderadas",          emoji: "🌧️" },
+  82: { label: "Pancadas Violentas",          emoji: "⛈️" },
+  85: { label: "Pancadas de Neve Fracas",     emoji: "🌨️" },
+  86: { label: "Pancadas de Neve Intensas",   emoji: "❄️" },
+  95: { label: "Tempestade",                  emoji: "⛈️" },
+  96: { label: "Tempestade com Granizo",      emoji: "⛈️" },
+  99: { label: "Tempestade com Granizo Forte",emoji: "⛈️" },
 };
 
 // ── DOM references ───────────────────────────────────────────────────────────
@@ -50,6 +50,7 @@ const detailHumidity     = document.getElementById("detailHumidity");
 const detailWind         = document.getElementById("detailWind");
 const detailFeelsLike    = document.getElementById("detailFeelsLike");
 const detailVisibility   = document.getElementById("detailVisibility");
+const forecastList       = document.getElementById("forecastList");
 
 const btnC = document.getElementById("btnC");
 const btnF = document.getElementById("btnF");
@@ -58,6 +59,7 @@ const btnF = document.getElementById("btnF");
 let currentTempC    = null;  // always stored in °C
 let feelsLikeTempC  = null;
 let currentUnit     = "C";
+let forecastDays    = [];    // array of { dateStr, maxC, minC, code }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function cToF(c) {
@@ -100,6 +102,11 @@ function applyUnit(unit) {
     detailFeelsLike.textContent = formatTemp(feelsLikeTempC, unit);
   }
 
+  // refresh forecast temperatures
+  if (forecastDays.length > 0) {
+    renderForecast(forecastDays);
+  }
+
   btnC.classList.toggle("active", unit === "C");
   btnF.classList.toggle("active", unit === "F");
 }
@@ -109,12 +116,12 @@ btnF.addEventListener("click", () => applyUnit("F"));
 
 // ── API calls ────────────────────────────────────────────────────────────────
 async function geocode(cityName) {
-  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`;
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=pt&format=json`;
   const res  = await fetch(url);
-  if (!res.ok) throw new Error("Geocoding request failed.");
+  if (!res.ok) throw new Error("Falha na requisição de geocodificação.");
   const data = await res.json();
   if (!data.results || data.results.length === 0) {
-    throw new Error(`City "${cityName}" not found. Please check the spelling.`);
+    throw new Error(`Cidade "${cityName}" não encontrada. Verifique a grafia.`);
   }
   return data.results[0];
 }
@@ -131,21 +138,49 @@ async function fetchWeather(lat, lon) {
       "wind_speed_10m",
       "visibility",
     ].join(","),
-    wind_speed_unit: "mph",
+    daily:                 [
+      "temperature_2m_max",
+      "temperature_2m_min",
+      "weather_code",
+    ].join(","),
+    wind_speed_unit: "kmh",
     timezone:        "auto",
   });
 
   const url = `https://api.open-meteo.com/v1/forecast?${params}`;
   const res  = await fetch(url);
-  if (!res.ok) throw new Error("Weather data request failed.");
+  if (!res.ok) throw new Error("Falha ao obter os dados do clima.");
   return res.json();
+}
+
+// ── Forecast render ──────────────────────────────────────────────────────────
+function renderForecast(days) {
+  forecastDays = days;
+  forecastList.innerHTML = "";
+
+  days.forEach(({ dateStr, maxC, minC, code }) => {
+    const wmo  = WMO_CODES[code] || { label: "–", emoji: "🌡️" };
+    const date = new Date(dateStr + "T12:00:00"); // noon to avoid timezone date shifts
+    const dayName = date.toLocaleDateString("pt-BR", { weekday: "short" });
+
+    const item = document.createElement("div");
+    item.className = "forecast-item";
+    item.innerHTML = `
+      <span class="forecast-day">${dayName}</span>
+      <span class="forecast-icon" aria-hidden="true">${wmo.emoji}</span>
+      <span class="forecast-temps">
+        <span class="forecast-max">${formatTemp(maxC, currentUnit)}</span>
+        <span class="forecast-min">${formatTemp(minC, currentUnit)}</span>
+      </span>`;
+    forecastList.appendChild(item);
+  });
 }
 
 // ── Render ───────────────────────────────────────────────────────────────────
 function renderWeather(location, weather) {
   const cur  = weather.current;
   const code = cur.weather_code;
-  const wmo  = WMO_CODES[code] || { label: "Unknown", emoji: "🌡️" };
+  const wmo  = WMO_CODES[code] || { label: "Desconhecido", emoji: "🌡️" };
 
   // store temps in Celsius for later unit switching
   currentTempC   = cur.temperature_2m;
@@ -164,12 +199,27 @@ function renderWeather(location, weather) {
   detailFeelsLike.textContent   = formatTemp(feelsLikeTempC, currentUnit);
 
   detailHumidity.textContent    = `${cur.relative_humidity_2m}%`;
-  detailWind.textContent        = `${Math.round(cur.wind_speed_10m)} mph`;
+  detailWind.textContent        = `${Math.round(cur.wind_speed_10m)} km/h`;
 
   const visKm = cur.visibility != null
     ? `${(cur.visibility / 1000).toFixed(1)} km`
     : "N/A";
   detailVisibility.textContent = visKm;
+
+  // build daily forecast array (skip index 0 = today)
+  const daily = weather.daily;
+  if (daily && daily.time && daily.time.length > 1) {
+    const days = daily.time.slice(1).map((dateStr, i) => ({
+      dateStr,
+      maxC: daily.temperature_2m_max[i + 1],
+      minC: daily.temperature_2m_min[i + 1],
+      code: daily.weather_code[i + 1],
+    }));
+    renderForecast(days);
+  } else {
+    forecastDays = [];
+    forecastList.innerHTML = "";
+  }
 
   show(weatherCard);
 }
@@ -188,7 +238,7 @@ async function handleSearch(query) {
     renderWeather(location, weather);
   } catch (err) {
     setLoading(false);
-    showError(err.message || "Something went wrong. Please try again.");
+    showError(err.message || "Algo deu errado. Por favor, tente novamente.");
   }
 }
 
