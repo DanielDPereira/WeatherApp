@@ -4,28 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WeatherApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+
     <div class="app">
       <header class="app-header">
-        <h1 class="app-title">WeatherApp</h1>
+        <div class="app-logo">
+          <span class="app-logo-icon">⛅</span>
+          <div>
+            <h1 class="app-title">WeatherApp</h1>
+            <p class="app-subtitle">Clima em tempo real</p>
+          </div>
+        </div>
         <form class="search-form" id="searchForm" autocomplete="off">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" width="18" height="18"
+            aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
           <input
             type="text"
             class="search-input"
             id="searchInput"
-            placeholder="Buscar uma cidade…"
+            placeholder="Buscar cidade…"
             aria-label="Nome da cidade"
           />
-          <button type="submit" class="search-btn" aria-label="Buscar">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" width="20" height="20">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-          </button>
+          <button type="submit" class="search-btn" aria-label="Buscar">Buscar</button>
         </form>
       </header>
 
@@ -34,14 +46,20 @@
 
         <div class="weather-card hidden" id="weatherCard">
           <div class="weather-location">
-            <span class="weather-city" id="weatherCity"></span>
+            <div class="weather-location-info">
+              <span class="location-pin" aria-hidden="true">📍</span>
+              <span class="weather-city" id="weatherCity"></span>
+            </div>
             <span class="weather-country" id="weatherCountry"></span>
           </div>
 
           <div class="weather-primary">
-            <div class="weather-icon" id="weatherIcon" aria-hidden="true"></div>
+            <div class="weather-icon-wrap">
+              <div class="weather-icon" id="weatherIcon" aria-hidden="true"></div>
+            </div>
             <div class="weather-temp">
               <span class="temp-value" id="tempValue"></span>
+              <p class="weather-description" id="weatherDescription"></p>
               <div class="temp-toggle">
                 <button class="unit-btn active" id="btnC" data-unit="C">°C</button>
                 <span class="unit-divider">|</span>
@@ -50,28 +68,34 @@
             </div>
           </div>
 
-          <p class="weather-description" id="weatherDescription"></p>
-
           <div class="weather-details">
             <div class="detail-item">
               <span class="detail-icon">💧</span>
-              <span class="detail-label">Umidade</span>
-              <span class="detail-value" id="detailHumidity"></span>
+              <div class="detail-info">
+                <span class="detail-label">Umidade</span>
+                <span class="detail-value" id="detailHumidity"></span>
+              </div>
             </div>
             <div class="detail-item">
               <span class="detail-icon">💨</span>
-              <span class="detail-label">Vento</span>
-              <span class="detail-value" id="detailWind"></span>
+              <div class="detail-info">
+                <span class="detail-label">Vento</span>
+                <span class="detail-value" id="detailWind"></span>
+              </div>
             </div>
             <div class="detail-item">
               <span class="detail-icon">🌡️</span>
-              <span class="detail-label">Sensação</span>
-              <span class="detail-value" id="detailFeelsLike"></span>
+              <div class="detail-info">
+                <span class="detail-label">Sensação</span>
+                <span class="detail-value" id="detailFeelsLike"></span>
+              </div>
             </div>
             <div class="detail-item">
               <span class="detail-icon">👁️</span>
-              <span class="detail-label">Visibilidade</span>
-              <span class="detail-value" id="detailVisibility"></span>
+              <div class="detail-info">
+                <span class="detail-label">Visibilidade</span>
+                <span class="detail-value" id="detailVisibility"></span>
+              </div>
             </div>
           </div>
 
@@ -88,7 +112,8 @@
 
         <div class="placeholder" id="placeholder">
           <div class="placeholder-icon">🌍</div>
-          <p>Digite o nome de uma cidade para ver o clima atual.</p>
+          <p class="placeholder-title">Descubra o clima</p>
+          <p class="placeholder-text">Digite o nome de uma cidade para ver as condições em tempo real.</p>
         </div>
       </main>
     </div>
