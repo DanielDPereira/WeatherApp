@@ -30,7 +30,7 @@ const WMO_CODES = {
   86: { label: "Pancadas de Neve Intensas",   emoji: "❄️" },
   95: { label: "Tempestade",                  emoji: "⛈️" },
   96: { label: "Tempestade com Granizo",      emoji: "⛈️" },
-  99: { label: "Tempestade com Granizo Forte",emoji: "⛈️" },
+  99: { label: "Tempestade com Granizo Forte", emoji: "⛈️" },
 };
 
 // ── DOM references ───────────────────────────────────────────────────────────
