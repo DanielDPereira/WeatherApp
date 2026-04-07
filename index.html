@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,10 +15,10 @@
             type="text"
             class="search-input"
             id="searchInput"
-            placeholder="Search for a city…"
-            aria-label="City name"
+            placeholder="Buscar uma cidade…"
+            aria-label="Nome da cidade"
           />
-          <button type="submit" class="search-btn" aria-label="Search">
+          <button type="submit" class="search-btn" aria-label="Buscar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" width="20" height="20">
@@ -55,35 +55,40 @@
           <div class="weather-details">
             <div class="detail-item">
               <span class="detail-icon">💧</span>
-              <span class="detail-label">Humidity</span>
+              <span class="detail-label">Umidade</span>
               <span class="detail-value" id="detailHumidity"></span>
             </div>
             <div class="detail-item">
               <span class="detail-icon">💨</span>
-              <span class="detail-label">Wind</span>
+              <span class="detail-label">Vento</span>
               <span class="detail-value" id="detailWind"></span>
             </div>
             <div class="detail-item">
               <span class="detail-icon">🌡️</span>
-              <span class="detail-label">Feels Like</span>
+              <span class="detail-label">Sensação</span>
               <span class="detail-value" id="detailFeelsLike"></span>
             </div>
             <div class="detail-item">
               <span class="detail-icon">👁️</span>
-              <span class="detail-label">Visibility</span>
+              <span class="detail-label">Visibilidade</span>
               <span class="detail-value" id="detailVisibility"></span>
             </div>
+          </div>
+
+          <div class="forecast-section" id="forecastSection">
+            <h3 class="forecast-title">Próximos Dias</h3>
+            <div class="forecast-list" id="forecastList"></div>
           </div>
         </div>
 
         <div class="loading hidden" id="loadingSpinner" aria-live="polite">
           <div class="spinner"></div>
-          <p>Fetching weather data…</p>
+          <p>Carregando dados do clima…</p>
         </div>
 
         <div class="placeholder" id="placeholder">
           <div class="placeholder-icon">🌍</div>
-          <p>Enter a city name to see the current weather.</p>
+          <p>Digite o nome de uma cidade para ver o clima atual.</p>
         </div>
       </main>
     </div>
