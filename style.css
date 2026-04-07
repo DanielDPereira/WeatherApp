@@ -493,6 +493,29 @@ body {
   color: rgba(255, 255, 255, 0.38);
 }
 
+/* ── Footer Attribution ─────────────────────────────── */
+.app-footer {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.app-footer-text {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.02em;
+}
+
+.app-footer-link {
+  color: rgba(96, 165, 250, 0.65);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.app-footer-link:hover {
+  color: #60a5fa;
+  text-decoration: underline;
+}
+
 /* ── Responsive ─────────────────────────────────────── */
 @media (max-width: 420px) {
   .app-title {
