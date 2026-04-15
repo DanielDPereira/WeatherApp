@@ -5,6 +5,24 @@
  * Weather:   https://api.open-meteo.com/v1/forecast
  */
 
+// ── Theme toggle ────────────────────────────────────────────────────────────
+(function initTheme() {
+  const saved = localStorage.getItem("weatherapp-theme");
+  if (saved) {
+    document.documentElement.setAttribute("data-theme", saved);
+  }
+  // If no preference saved, default is dark (no data-theme attribute needed)
+})();
+
+const themeToggle = document.getElementById("themeToggle");
+
+themeToggle.addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("weatherapp-theme", next);
+});
+
 // ── WMO weather-code map ────────────────────────────────────────────────────
 const WMO_CODES = {
   0:  { label: "Céu Limpo",                  emoji: "☀️" },
